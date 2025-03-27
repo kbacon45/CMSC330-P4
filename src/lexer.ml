@@ -33,7 +33,7 @@ let validToken inputStr = match inputStr with
 | "printf" -> Tok_Print
 | "main" -> Tok_Main
 | "if" -> Tok_If
-| "else" -> Tok_For
+| "else" -> Tok_Else
 | "for" -> Tok_For
 | "from" -> Tok_From
 | "to" -> Tok_To
@@ -50,9 +50,13 @@ let validToken inputStr = match inputStr with
 
 
 
-let rec crawl input start ender = if (ender > (String.length input)) ||  (validToken (String.sub input start ender)) = EOF
-  then  String.sub input start (ender-1)
-  else  crawl input start (ender+1)
+let rec crawl input start ender = if (ender > (String.length input)) 
+  then input  
+  else ( let inputRecur = (crawl input start (ender+1)) in
+  if (validToken inputRecur) = EOF
+  then String.sub input 0 ((String.length inputRecur) - 1)
+else inputRecur 
+  )
 
 
 
@@ -82,8 +86,8 @@ let rec tokenizeHelp (input : string) (lst : token list) : token list =
     | '\t' | '\n' | ' ' -> 
         tokenizeHelp (nextDiff input [' '; '\n'; '\t'] false) lst
     | _ -> 
-        let newStr = (crawl input 0 1) in
-        let newTok = String.sub input 0 (String.length newStr) in
+        let newStr = (crawl input 0 1) in if newStr = "" then raise (InvalidInputException "This is an invalid input!") 
+        else let newTok = String.sub input 0 (String.length newStr) in
         tokenizeHelp (String.sub input (String.length newStr) 
         (String.length input - String.length newStr)) (lst @ [validToken newTok])
 
