@@ -25,7 +25,7 @@ let validToken inputStr = match inputStr with
 | "<=" -> Tok_LessEqual
 | ">=" -> Tok_GreaterEqual
 | "||" -> Tok_Or
-| "&&" -> Tok_Add
+| "&&" -> Tok_And
 | "!" -> Tok_Not
 | ";" -> Tok_Semi
 | "int" -> Tok_Int_Type
