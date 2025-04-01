@@ -176,18 +176,10 @@ let rec eval_stmt env s = match s with
     then let newEnv = (eval_stmt env body) in (eval_stmt newEnv (While(guard,body)))
     else env
 )
-| Print message -> 
-    let res = eval_expr env message in
-    (match res with
-    | Int_Val v -> 
-        print_output_int v;
-        print_output_newline ();
-        env
-    | Bool_Val b -> 
-        print_output_bool b;
-        print_output_newline ();
-        env
-    )
+| Print message -> let res = (eval_expr env message) in 
+match res with
+| Int_Val v -> let printer = print_output_int v in let _ = print_output_newline printer in env
+| Bool_Val b -> let printer = print_output_bool b in let _ = print_output_newline printer in env
 
 
 
